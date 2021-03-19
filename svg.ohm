@@ -1,0 +1,21 @@
+HTMLSVG {
+  htmlsvg = docTypeHeader htmlHeader bodyHeader svgElement bodyEnd htmlEnd
+  htmlHeader = "<html>" ws*
+  htmlEnd = "</html>" ws*
+  bodyHeader = "<body>" ws*
+  bodyEnd = "</body>" ws*
+  docTypeHeader = "<!DOCTYPE" stuff* ">" ws* 
+  svgElement = "<svg" attribute* ">" ws* element+ "</svg>" ws*
+  emptyDefs = "<defs/>" ws*
+  element = (elementWithelements | elementWithoutelements) text* ws*
+  elementWithelements = "<" name stuff* ">" ws* (element+ | text*) "</" name ">" ws*
+  elementWithoutelements = "<" name stuff* "/>"
+  stuff = ~">" ~"/>" ~"<" ~"?>" any
+  text = stuff
+  attribute = stuff
+  name = name1st nameFollow*
+  name1st = "a" .. "z" | "A" .. "Z"
+  nameFollow = "0" .. "9" | name1st
+
+  ws = " " | "\n" | "\t"
+}
