@@ -1,4 +1,4 @@
-  htmlsvg [@ws docH htmlH bodyH @elements bodyE htmlE] = ${ws}${docH}${htmlH}${bodyH}${elements}${bodyE}${htmlE}
+  htmlsvg [@ws docH htmlH bodyH @elements bodyE htmlE] = ${elements}
   htmlHeader [_ @ws] = ${_}${ws}
   htmlEnd [_ @ws] = ${_}${ws}
   bodyHeader [_ @ws] = ${_}${ws}
@@ -6,18 +6,31 @@
   docTypeHeader [_1 @stuff _2 @ws] = ${_1}${stuff}${_2}${ws}
 
   element [e] = ${e}
-  svgElement [_1 _2 @ws @attributes _5 @_6 @elements @text _9 _10 _11 @_12] = ${_1}${_2}${ws}${attributes}${_5}${_6}${elements}${text}${_9}${_10}${_11}${_12}
-  rectElement [_1 _2 @ws @attributes _5 @_6 @elements @text _9 _10 _11 @_12] = ${_1}${_2}${ws}${attributes}${_5}${_6}${elements}${text}${_9}${_10}${_11}${_12}
-  textElement [_1 _2 @ws @attributes _5 @_6 @elements @text _9 _10 _11 @_12] = ${_1}${_2}${ws}${attributes}${_5}${_6}${elements}${text}${_9}${_10}${_11}${_12}
+  svgElement [_1 _2 @ws @attributes _5 @_6 @elements @text _9 _10 _11 @_12] = {{ gennew (); }} ${attributes}${elements}
+  rectElement [_1 _2 @ws @attributes _5 @_6 @elements @text _9 _10 _11 @_12] =
+  {{ gennew (); }}
+  [[
+     rect(${id ()},"").
+     ${attributes}
+     ${elements} ]]
+
+  textElement [_1 _2 @ws @attributes _5 @_6 @elements @text _9 _10 _11 @_12] =
+  {{ gennew (); }}
+    [[ 
+       text(${id ()},"").
+       ${attributes}
+       ${elements}
+       text(${id ()}, "${text}"). ]]
+
   basicElement [_1 _2 @ws @attributes _5 @_6 @elements @text _9 _10 _11 @_12] = ${_1}${_2}${ws}${attributes}${_5}${_6}${elements}${text}${_9}${_10}${_11}${_12}
 
   attribute [a] = ${a}
-  widthAttribute [_ _eq str @_ws] = ${_}${_eq}${str}${_ws}
-  heightAttribute [_ _eq str @_ws] = ${_}${_eq}${str}${_ws}
-  xAttribute [_ _eq str @_ws] = ${_}${_eq}${str}${_ws}
-  yAttribute [_ _eq str @_ws] = ${_}${_eq}${str}${_ws}
-  fillAttribute [_ _eq str @_ws] = ${_}${_eq}${str}${_ws}
-  genericAttribute [_ _eq str @_ws] = ${_}${_eq}${str}${_ws}
+  widthAttribute [_ _eq str @_ws] = [[width(${id ()},${str}).\n]]
+  heightAttribute [_ _eq str @_ws] = [[height(${id ()},${str}).\n]]
+  xAttribute [_ _eq str @_ws] = [[x(${id ()},${str}).\n]]
+  yAttribute [_ _eq str @_ws] = [[y(${id ()},${str}).\n]]
+  fillAttribute [_ _eq str @_ws] = [[fill(${id ()},${str}).\n]]
+  genericAttribute [_ _eq str @_ws] = %\n
 
   text [x] = ${x}
 
