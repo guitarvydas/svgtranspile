@@ -8,7 +8,7 @@ function ohm_parse (grammar, text) {
 	return { parser: parser, cst: cst };
     } else {
 	console.log (parser.trace (text).toString ());
-	throw "Ohm matching failed";
+	throw "svg2p: Ohm matching failed";
     }
 }
 

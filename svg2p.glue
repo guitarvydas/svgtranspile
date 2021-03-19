@@ -1,0 +1,34 @@
+  htmlsvg [@ws docH htmlH bodyH @elements bodyE htmlE] = ${ws}${docH}${htmlH}${bodyH}${elements}${bodyE}${htmlE}
+  htmlHeader [_ @ws] = ${_}${ws}
+  htmlEnd [_ @ws] = ${_}${ws}
+  bodyHeader [_ @ws] = ${_}${ws}
+  bodyEnd [_ @ws] = ${_}${ws}
+  docTypeHeader [_1 @stuff _2 @ws] = ${_1}${stuff}${_2}${ws}
+
+  element [e] = ${e}
+  svgElement [_1 _2 @ws @attributes _5 @_6 @elements @text _9 _10 _11 @_12] = ${_1}${_2}${ws}${attributes}${_5}${_6}${elements}${text}${_9}${_10}${_11}${_12}
+  rectElement [_1 _2 @ws @attributes _5 @_6 @elements @text _9 _10 _11 @_12] = ${_1}${_2}${ws}${attributes}${_5}${_6}${elements}${text}${_9}${_10}${_11}${_12}
+  textElement [_1 _2 @ws @attributes _5 @_6 @elements @text _9 _10 _11 @_12] = ${_1}${_2}${ws}${attributes}${_5}${_6}${elements}${text}${_9}${_10}${_11}${_12}
+  basicElement [_1 _2 @ws @attributes _5 @_6 @elements @text _9 _10 _11 @_12] = ${_1}${_2}${ws}${attributes}${_5}${_6}${elements}${text}${_9}${_10}${_11}${_12}
+
+  attribute [a] = ${a}
+  widthAttribute [_ _eq str @_ws] = ${_}${_eq}${str}${_ws}
+  heightAttribute [_ _eq str @_ws] = ${_}${_eq}${str}${_ws}
+  xAttribute [_ _eq str @_ws] = ${_}${_eq}${str}${_ws}
+  yAttribute [_ _eq str @_ws] = ${_}${_eq}${str}${_ws}
+  fillAttribute [_ _eq str @_ws] = ${_}${_eq}${str}${_ws}
+  genericAttribute [_ _eq str @_ws] = ${_}${_eq}${str}${_ws}
+
+  text [x] = ${x}
+
+  name [c @cs] = ${c}${cs}
+
+  name1st [c] = ${c}
+  nameFollow [c] = ${c}
+
+  stuff [c] = ${c}
+
+  string [_1 @cs _2] = "${cs}"
+  notQ [c] = ${c}
+  ws [c] = ${c}
+

@@ -1,21 +1,36 @@
+
 HTMLSVG {
-  htmlsvg = docTypeHeader htmlHeader bodyHeader svgElement bodyEnd htmlEnd
+  htmlsvg = ws* docTypeHeader htmlHeader bodyHeader element+ bodyEnd htmlEnd
   htmlHeader = "<html>" ws*
   htmlEnd = "</html>" ws*
   bodyHeader = "<body>" ws*
   bodyEnd = "</body>" ws*
   docTypeHeader = "<!DOCTYPE" stuff* ">" ws* 
-  svgElement = "<svg" attribute* ">" ws* element+ "</svg>" ws*
-  emptyDefs = "<defs/>" ws*
-  element = (elementWithelements | elementWithoutelements) text* ws*
-  elementWithelements = "<" name stuff* ">" ws* (element+ | text*) "</" name ">" ws*
-  elementWithoutelements = "<" name stuff* "/>"
-  stuff = ~">" ~"/>" ~"<" ~"?>" any
+
+  element = svgElement | rectElement | textElement | basicElement
+  svgElement = "<" "svg" ws* attribute* ">" ws* element* text* "</" "svg" ">" ws*
+  rectElement = "<" "rect" ws* attribute* ">" ws* element* text* "</" "rect" ">" ws*
+  textElement = "<" "text" ws* attribute* ">" ws* element* text* "</" "text" ">" ws*
+  basicElement = "<" name ws* attribute* ">" ws* element* text* "</" name ">" ws*
+
+  attribute =  widthAttribute | heightAttribute | xAttribute | yAttribute | fillAttribute
+             | genericAttribute
+  widthAttribute = "width" "=" string ws*
+  heightAttribute = "height" "=" string ws*
+  xAttribute = "x" "=" string ws*
+  yAttribute = "y" "=" string ws*
+  fillAttribute = "fill" "=" string ws*
+  genericAttribute = name "=" string ws*
+
   text = stuff
-  attribute = stuff
   name = name1st nameFollow*
   name1st = "a" .. "z" | "A" .. "Z"
   nameFollow = "0" .. "9" | name1st
 
+  stuff = ~">" ~"/>" ~"<" ~"?>" any
+
+  string = "\"" notQ* "\""
+  notQ = ~"\"" any
   ws = " " | "\n" | "\t"
 }
+

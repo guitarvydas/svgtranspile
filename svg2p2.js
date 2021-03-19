@@ -11,13 +11,13 @@ function main () {
     var sem = {};
     var outputString = "";
     if (cst.succeeded ()) {
-	// sem = parser.createSemantics ();
-	// addSemantics (sem);
-	// outputString = sem (cst).svg2p ();
+	sem = parser.createSemantics ();
+	addSemantics (sem);
+	outputString = sem (cst)._glue ();
     }
     return { cst: cst, semantics: sem, resultString: outputString };
 }
 
 
 var { cst, semantics, resultString } = main ();
-console.log(resultString);
+process.stdout.write(resultString);
