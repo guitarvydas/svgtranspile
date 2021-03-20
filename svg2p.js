@@ -22,38 +22,54 @@ function getNamedFile (fname) {
 }
 'use strict'
 
-function scope () {
-    this._stack = [];
-    this._namestack = [];
-    this._topindex = -1;
-    this._getIndex = function () { 
-      if (this._topindex != (this._stack.length - 1)) {
-        throw "glue: internal index error";
-      };
-      return this._topindex; 
-    };
-    this.put = function (key, val) {
-	var i = this._getIndex ();
-	this._stack[i][key] = val;
-    };
-    this.get = function (key) {
-	var i = this._getIndex ();
-	while (i >= 0) {
-	    if (this._stack[i][key]) {
-		return this._stack[i][key];
-	    };
-	    i -= 1;
-	};
-        console.log (this._stack);
-        console.log (this._namestack);
-        console.log (this._getIndex ());
-	throw "scope: key [" + key.toString () +  "] not found";
-    };
-    this.push = function (name) { this._topindex += 1; this._namestack.push (name); this._stack.push ([]); };
-    this.pop = function () { /*console.log ("pop " + this._namestack.toString ());*/ this._stack.pop (); this._namestack.pop (); this._topindex -= 1;};
-};
-var _glueDynamicScope = new scope ();
+var _scope;
 
+function scopeStack () {
+    this._stack = [];
+    this.pushNew = function () {this._stack.push ([])};
+    this.pop = function () {this._stack.pop ()};
+    this._topIndex = function () {return this._stack.length - 1;};
+    this._top = function () { return this._stack[this._topIndex ()]; };
+    this.scopeAdd = function (key, val) {
+	this._top ().push ({key: key, val: val});
+    };
+    this._lookup = function (key, a) { 
+      return a.find (obj => {return obj && obj.key && (obj.key == key)}); };
+    this.scopeGet = function (key) {
+	var i = this._topIndex ();
+	for (; i > 0 ; i -= 1) {
+	    var obj = this._lookup (key, this._stack [i]);
+	    if (obj) {
+		return obj.val;
+	    };
+	};
+	console.log (this._stack);
+	console.log (key);
+	throw "scopeGet internal error";
+    };
+}
+
+function scopeAdd (key, val) {
+  return _scope.scopeAdd (key, val);
+}
+
+function scopeGet (key, val) {
+  return _scope.scopeGet (key, val);
+}
+
+function _ruleInit () {
+    _scope = new scopeStack ();
+}
+
+function _ruleEnter (ruleName) {
+    _scope.pushNew ();
+}
+
+function _ruleExit (ruleName) {
+    _scope.pop ();
+}
+
+_ruleInit ();
 
 function addSemantics (sem) { 
   sem.addOperation (
@@ -61,7 +77,7 @@ function addSemantics (sem) {
 {
 
                htmlsvg : function (_ws,_docH,_htmlH,_bodyH,_elements,_bodyE,_htmlE) { 
-                          _glueDynamicScope.push ("htmlsvg");
+                          _ruleEnter ("htmlsvg");
                           
                           var ws = _ws._glue ().join ('');
 var docH = _docH._glue ();
@@ -70,68 +86,68 @@ var bodyH = _bodyH._glue ();
 var elements = _elements._glue ().join ('');
 var bodyE = _bodyE._glue ();
 var htmlE = _htmlE._glue ();
-                          _glueDynamicScope.pop ();
+                          _ruleExit ("htmlsvg");
                           return `${elements}`; 
                         },
             
                htmlHeader : function (__,_ws) { 
-                          _glueDynamicScope.push ("htmlHeader");
+                          _ruleEnter ("htmlHeader");
                           
                           var _ = __._glue ();
 var ws = _ws._glue ().join ('');
-                          _glueDynamicScope.pop ();
+                          _ruleExit ("htmlHeader");
                           return `${_}${ws}`; 
                         },
             
                htmlEnd : function (__,_ws) { 
-                          _glueDynamicScope.push ("htmlEnd");
+                          _ruleEnter ("htmlEnd");
                           
                           var _ = __._glue ();
 var ws = _ws._glue ().join ('');
-                          _glueDynamicScope.pop ();
+                          _ruleExit ("htmlEnd");
                           return `${_}${ws}`; 
                         },
             
                bodyHeader : function (__,_ws) { 
-                          _glueDynamicScope.push ("bodyHeader");
+                          _ruleEnter ("bodyHeader");
                           
                           var _ = __._glue ();
 var ws = _ws._glue ().join ('');
-                          _glueDynamicScope.pop ();
+                          _ruleExit ("bodyHeader");
                           return `${_}${ws}`; 
                         },
             
                bodyEnd : function (__,_ws) { 
-                          _glueDynamicScope.push ("bodyEnd");
+                          _ruleEnter ("bodyEnd");
                           
                           var _ = __._glue ();
 var ws = _ws._glue ().join ('');
-                          _glueDynamicScope.pop ();
+                          _ruleExit ("bodyEnd");
                           return `${_}${ws}`; 
                         },
             
                docTypeHeader : function (__1,_stuff,__2,_ws) { 
-                          _glueDynamicScope.push ("docTypeHeader");
+                          _ruleEnter ("docTypeHeader");
                           
                           var _1 = __1._glue ();
 var stuff = _stuff._glue ().join ('');
 var _2 = __2._glue ();
 var ws = _ws._glue ().join ('');
-                          _glueDynamicScope.pop ();
+                          _ruleExit ("docTypeHeader");
                           return `${_1}${stuff}${_2}${ws}`; 
                         },
             
                element : function (_e) { 
-                          _glueDynamicScope.push ("element");
+                          _ruleEnter ("element");
                           
                           var e = _e._glue ();
-                          _glueDynamicScope.pop ();
+                          _ruleExit ("element");
                           return `${e}`; 
                         },
             
                svgElement : function (__1,__2,_ws,_attributes,__5,__6,_elements,_text,__9,__10,__11,__12) { 
-                          _glueDynamicScope.push ("svgElement");
-                           var name = genid (); 
+                          _ruleEnter ("svgElement");
+                           var name = "svg"; scopeAdd ("path", name); 
                           var _1 = __1._glue ();
 var _2 = __2._glue ();
 var ws = _ws._glue ().join ('');
@@ -144,15 +160,15 @@ var _9 = __9._glue ();
 var _10 = __10._glue ();
 var _11 = __11._glue ();
 var _12 = __12._glue ().join ('');
-                          _glueDynamicScope.pop ();
+                          _ruleExit ("svgElement");
                           return ` svgbox(${name},"").
 	     ${attributes}
 	     ${elements}`; 
                         },
             
                rectElement : function (__1,__2,_ws,_attributes,__5,__6,_elements,_text,__9,__10,__11,__12) { 
-                          _glueDynamicScope.push ("rectElement");
-                           genid (); 
+                          _ruleEnter ("rectElement");
+                           var name = scopeGet ("path") + "_rect"; scopeAdd ("path", name); 
                           var _1 = __1._glue ();
 var _2 = __2._glue ();
 var ws = _ws._glue ().join ('');
@@ -165,16 +181,16 @@ var _9 = __9._glue ();
 var _10 = __10._glue ();
 var _11 = __11._glue ();
 var _12 = __12._glue ().join ('');
-                          _glueDynamicScope.pop ();
+                          _ruleExit ("rectElement");
                           return `
-     rect(${id ()},"").
+     rect(${name},"").
      ${attributes}
      ${elements} `; 
                         },
             
                textElement : function (__1,__2,_ws,_attributes,__5,__6,_elements,_text,__9,__10,__11,__12) { 
-                          _glueDynamicScope.push ("textElement");
-                           genid (); 
+                          _ruleEnter ("textElement");
+                           var name = scopeGet ("path") + "_text"; scopeAdd ("path", name); 
                           var _1 = __1._glue ();
 var _2 = __2._glue ();
 var ws = _ws._glue ().join ('');
@@ -187,16 +203,16 @@ var _9 = __9._glue ();
 var _10 = __10._glue ();
 var _11 = __11._glue ();
 var _12 = __12._glue ().join ('');
-                          _glueDynamicScope.pop ();
+                          _ruleExit ("textElement");
                           return ` 
-       text(${id ()},"").
+       text(${name},"").
        ${attributes}
        ${elements}
-       text(${id ()}, "${text}"). `; 
+       string(${name}, "${text}"). `; 
                         },
             
                basicElement : function (__1,__2,_ws,_attributes,__5,__6,_elements,_text,__9,__10,__11,__12) { 
-                          _glueDynamicScope.push ("basicElement");
+                          _ruleEnter ("basicElement");
                           
                           var _1 = __1._glue ();
 var _2 = __2._glue ();
@@ -210,148 +226,148 @@ var _9 = __9._glue ();
 var _10 = __10._glue ();
 var _11 = __11._glue ();
 var _12 = __12._glue ().join ('');
-                          _glueDynamicScope.pop ();
+                          _ruleExit ("basicElement");
                           return `${_1}${_2}${ws}${attributes}${_5}${_6}${elements}${text}${_9}${_10}${_11}${_12}`; 
                         },
             
                attribute : function (_a) { 
-                          _glueDynamicScope.push ("attribute");
+                          _ruleEnter ("attribute");
                           
                           var a = _a._glue ();
-                          _glueDynamicScope.pop ();
+                          _ruleExit ("attribute");
                           return `${a}`; 
                         },
             
                widthAttribute : function (__,__eq,_str,__ws) { 
-                          _glueDynamicScope.push ("widthAttribute");
+                          _ruleEnter ("widthAttribute");
                           
                           var _ = __._glue ();
 var _eq = __eq._glue ();
 var str = _str._glue ();
 var _ws = __ws._glue ().join ('');
-                          _glueDynamicScope.pop ();
-                          return `width(${id ()},${str}).\n`; 
+                          _ruleExit ("widthAttribute");
+                          return `width(${scopeGet ("path")},${str}).\n`; 
                         },
             
                heightAttribute : function (__,__eq,_str,__ws) { 
-                          _glueDynamicScope.push ("heightAttribute");
+                          _ruleEnter ("heightAttribute");
                           
                           var _ = __._glue ();
 var _eq = __eq._glue ();
 var str = _str._glue ();
 var _ws = __ws._glue ().join ('');
-                          _glueDynamicScope.pop ();
-                          return `height(${id ()},${str}).\n`; 
+                          _ruleExit ("heightAttribute");
+                          return `height(${scopeGet ("path")},${str}).\n`; 
                         },
             
                xAttribute : function (__,__eq,_str,__ws) { 
-                          _glueDynamicScope.push ("xAttribute");
+                          _ruleEnter ("xAttribute");
                           
                           var _ = __._glue ();
 var _eq = __eq._glue ();
 var str = _str._glue ();
 var _ws = __ws._glue ().join ('');
-                          _glueDynamicScope.pop ();
-                          return `x(${id ()},${str}).\n`; 
+                          _ruleExit ("xAttribute");
+                          return `x(${scopeGet ("path")},${str}).\n`; 
                         },
             
                yAttribute : function (__,__eq,_str,__ws) { 
-                          _glueDynamicScope.push ("yAttribute");
+                          _ruleEnter ("yAttribute");
                           
                           var _ = __._glue ();
 var _eq = __eq._glue ();
 var str = _str._glue ();
 var _ws = __ws._glue ().join ('');
-                          _glueDynamicScope.pop ();
-                          return `y(${id ()},${str}).\n`; 
+                          _ruleExit ("yAttribute");
+                          return `y(${scopeGet ("path")},${str}).\n`; 
                         },
             
                fillAttribute : function (__,__eq,_str,__ws) { 
-                          _glueDynamicScope.push ("fillAttribute");
+                          _ruleEnter ("fillAttribute");
                           
                           var _ = __._glue ();
 var _eq = __eq._glue ();
 var str = _str._glue ();
 var _ws = __ws._glue ().join ('');
-                          _glueDynamicScope.pop ();
-                          return `fill(${id ()},${str}).\n`; 
+                          _ruleExit ("fillAttribute");
+                          return `fill(${scopeGet ("path")},${str}).\n`; 
                         },
             
                genericAttribute : function (__,__eq,_str,__ws) { 
-                          _glueDynamicScope.push ("genericAttribute");
+                          _ruleEnter ("genericAttribute");
                           
                           var _ = __._glue ();
 var _eq = __eq._glue ();
 var str = _str._glue ();
 var _ws = __ws._glue ().join ('');
-                          _glueDynamicScope.pop ();
+                          _ruleExit ("genericAttribute");
                           return `%\n`; 
                         },
             
                text : function (_x) { 
-                          _glueDynamicScope.push ("text");
+                          _ruleEnter ("text");
                           
                           var x = _x._glue ();
-                          _glueDynamicScope.pop ();
+                          _ruleExit ("text");
                           return `${x}`; 
                         },
             
                name : function (_c,_cs) { 
-                          _glueDynamicScope.push ("name");
+                          _ruleEnter ("name");
                           
                           var c = _c._glue ();
 var cs = _cs._glue ().join ('');
-                          _glueDynamicScope.pop ();
+                          _ruleExit ("name");
                           return `${c}${cs}`; 
                         },
             
                name1st : function (_c) { 
-                          _glueDynamicScope.push ("name1st");
+                          _ruleEnter ("name1st");
                           
                           var c = _c._glue ();
-                          _glueDynamicScope.pop ();
+                          _ruleExit ("name1st");
                           return `${c}`; 
                         },
             
                nameFollow : function (_c) { 
-                          _glueDynamicScope.push ("nameFollow");
+                          _ruleEnter ("nameFollow");
                           
                           var c = _c._glue ();
-                          _glueDynamicScope.pop ();
+                          _ruleExit ("nameFollow");
                           return `${c}`; 
                         },
             
                stuff : function (_c) { 
-                          _glueDynamicScope.push ("stuff");
+                          _ruleEnter ("stuff");
                           
                           var c = _c._glue ();
-                          _glueDynamicScope.pop ();
+                          _ruleExit ("stuff");
                           return `${c}`; 
                         },
             
                string : function (__1,_cs,__2) { 
-                          _glueDynamicScope.push ("string");
+                          _ruleEnter ("string");
                           
                           var _1 = __1._glue ();
 var cs = _cs._glue ().join ('');
 var _2 = __2._glue ();
-                          _glueDynamicScope.pop ();
+                          _ruleExit ("string");
                           return `"${cs}"`; 
                         },
             
                notQ : function (_c) { 
-                          _glueDynamicScope.push ("notQ");
+                          _ruleEnter ("notQ");
                           
                           var c = _c._glue ();
-                          _glueDynamicScope.pop ();
+                          _ruleExit ("notQ");
                           return `${c}`; 
                         },
             
                ws : function (_c) { 
-                          _glueDynamicScope.push ("ws");
+                          _ruleEnter ("ws");
                           
                           var c = _c._glue ();
-                          _glueDynamicScope.pop ();
+                          _ruleExit ("ws");
                           return `${c}`; 
                         },
             
@@ -365,6 +381,7 @@ _terminal: function () { return this.primitiveValue; }
 function main () {
     // usage: svg2p.js <file
     // reads grammar from "svg.ohm" 
+    _ruleInit ();
     var text = getNamedFile ("-");
     var grammar = getNamedFile ("svg.ohm");
     var { parser, cst } = ohm_parse (grammar, text);
@@ -382,24 +399,4 @@ function main () {
 var { cst, semantics, resultString } = main ();
 process.stdout.write(resultString);
 'use strict';
-
-var _id;
-
-function init_id () {
-    if (_id) {
-    } else {
-	_id = 0;
-    };
-}
-
-function genid () {
-    init_id ();
-    _id += 1;
-    _glueDynamicScope.put ("id", "id" + _id.toString ());
-    return "";
-}
-
-function id () {
-    init_id ();
-    return _glueDynamicScope.get ("id");
-}
+// empty
