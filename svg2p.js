@@ -50,7 +50,7 @@ function scope () {
 	throw "scope: key [" + key.toString () +  "] not found";
     };
     this.push = function (name) { this._topindex += 1; this._namestack.push (name); this._stack.push ([]); };
-    this.pop = function () { this._stack.pop (); this._namestack.pop (); this._topindex -= 1;};
+    this.pop = function () { /*console.log ("pop " + this._namestack.toString ());*/ this._stack.pop (); this._namestack.pop (); this._topindex -= 1;};
 };
 var _glueDynamicScope = new scope ();
 
@@ -131,7 +131,7 @@ var ws = _ws._glue ().join ('');
             
                svgElement : function (__1,__2,_ws,_attributes,__5,__6,_elements,_text,__9,__10,__11,__12) { 
                           _glueDynamicScope.push ("svgElement");
-                           genid (); 
+                           var name = genid (); 
                           var _1 = __1._glue ();
 var _2 = __2._glue ();
 var ws = _ws._glue ().join ('');
@@ -145,7 +145,7 @@ var _10 = __10._glue ();
 var _11 = __11._glue ();
 var _12 = __12._glue ().join ('');
                           _glueDynamicScope.pop ();
-                          return ` svgbox(${id ()},"").
+                          return ` svgbox(${name},"").
 	     ${attributes}
 	     ${elements}`; 
                         },
@@ -400,5 +400,6 @@ function genid () {
 }
 
 function id () {
+    init_id ();
     return _glueDynamicScope.get ("id");
 }
