@@ -47,10 +47,27 @@ function scopeStack () {
 	console.log (key);
 	throw "scopeGet internal error";
     };
+    this.scopeModify = function (key, val) {
+	var i = this._topIndex ();
+	for (; i > 0 ; i -= 1) {
+	    var obj = this._lookup (key, this._stack [i]);
+	    if (obj) {
+              obj.val = val;
+              return val;
+	    };
+	};
+	console.log (this._stack);
+	console.log (key);
+	throw "scopeModify internal error";
+    };
 }
 
 function scopeAdd (key, val) {
   return _scope.scopeAdd (key, val);
+}
+
+function scopeModify (key, val) {
+  return _scope.scopeModify (key, val);
 }
 
 function scopeGet (key, val) {
@@ -147,7 +164,7 @@ var ws = _ws._glue ().join ('');
             
                svgElement : function (__1,__2,_ws,_attributes,__5,__6,_elements,_text,__9,__10,__11,__12) { 
                           _ruleEnter ("svgElement");
-                           var name = "svg"; scopeAdd ("path", name); 
+                           var name = "svg"; scopeAdd ("path", name); scopeAdd ("counter", 0); 
                           var _1 = __1._glue ();
 var _2 = __2._glue ();
 var ws = _ws._glue ().join ('');
@@ -168,7 +185,7 @@ var _12 = __12._glue ().join ('');
             
                rectElement : function (__1,__2,_ws,_attributes,__5,__6,_elements,_text,__9,__10,__11,__12) { 
                           _ruleEnter ("rectElement");
-                           var name = scopeGet ("path") + "_rect"; scopeAdd ("path", name); 
+                           var name = scopeGet ("path") + "_rect_" + gen (); scopeAdd ("path", name); 
                           var _1 = __1._glue ();
 var _2 = __2._glue ();
 var ws = _ws._glue ().join ('');
@@ -190,7 +207,7 @@ var _12 = __12._glue ().join ('');
             
                textElement : function (__1,__2,_ws,_attributes,__5,__6,_elements,_text,__9,__10,__11,__12) { 
                           _ruleEnter ("textElement");
-                           var name = scopeGet ("path") + "_text"; scopeAdd ("path", name); 
+                           var name = scopeGet ("path") + "_text_" + gen (); scopeAdd ("path", name); 
                           var _1 = __1._glue ();
 var _2 = __2._glue ();
 var ws = _ws._glue ().join ('');
@@ -400,3 +417,9 @@ var { cst, semantics, resultString } = main ();
 process.stdout.write(resultString);
 'use strict';
 // empty
+
+function gen () {
+    var i = scopeGet ("counter");
+    scopeModify ("counter", i + 1);
+    return i.toString ();
+}
