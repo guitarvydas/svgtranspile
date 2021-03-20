@@ -17,5 +17,6 @@ function genid () {
 }
 
 function id () {
+    init_id ();
     return _glueDynamicScope.get ("id");
 }
