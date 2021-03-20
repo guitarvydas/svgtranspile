@@ -12,10 +12,10 @@ function init_id () {
 function genid () {
     init_id ();
     _id += 1;
-    _gluescope.put ("id", "id" + _id.toString ());
+    _glueDynamicScope.put ("id", "id" + _id.toString ());
     return "";
 }
 
 function id () {
-    return _gluescope.get ("id");
+    return _glueDynamicScope.get ("id");
 }
