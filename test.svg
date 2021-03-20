@@ -2,9 +2,10 @@
 <html>
 <body>
 
-<svg xmlns="http://www.w3.org/2000/svg" width="400" height="110">
-  <rect width="300" height="100" fill="red" style="stroke-width:1;stroke:rgb(0,0,0)" >invisible</rect>
-    <text x="100" y="55" fill="black">This is Text!</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="510">
+  <rect width="200" height="100" fill="lightyellow" style="stroke-width:1;stroke:black" ></rect>
+    <text x="100" y="55" fill="black">output</text>
+    <text x="300" y="55" fill="black">floating</text>
 
   Sorry, your browser does not support inline SVG.  
 </svg>
