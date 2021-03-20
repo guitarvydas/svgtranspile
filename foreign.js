@@ -6,5 +6,5 @@ function gennew () {
 }
 
 function id () {
-    return "ID" + _id;
+    return "id" + _id;
 }
