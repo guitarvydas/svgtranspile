@@ -5,6 +5,7 @@
 function main () {
     // usage: svg2p.js <file
     // reads grammar from "svg.ohm" 
+    _ruleInit ();
     var text = getNamedFile ("-");
     var grammar = getNamedFile ("svg.ohm");
     var { parser, cst } = ohm_parse (grammar, text);

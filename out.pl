@@ -8,20 +8,20 @@
 
 %
 %
-fill(id2,"lightyellow").
-fill(id3,"black").
-fill(id4,"black").
-height(id1,"510").
-height(id2,"100").
-rect(id1,"").
-svgbox(,"").
-text(id1, "floating"). 
-text(id1, "output").  
-text(id1,"").
-text(id1,"").
-width(id1,"600").
-width(id2,"200").
-x(id3,"100").
-x(id4,"300").
-y(id3,"55").
-y(id4,"55").
+fill(svg_rect,"lightyellow").
+fill(svg_text,"black").
+fill(svg_text,"black").
+height(svg,"510").
+height(svg_rect,"100").
+rect(svg_rect,"").
+string(svg_text, "floating"). 
+string(svg_text, "output").  
+svgbox(svg,"").
+text(svg_text,"").
+text(svg_text,"").
+width(svg,"600").
+width(svg_rect,"200").
+x(svg_text,"100").
+x(svg_text,"300").
+y(svg_text,"55").
+y(svg_text,"55").
