@@ -1,17 +1,34 @@
+bbbottom(svg,510).
+bbbottom(svg_rect_0,100).
+bbleft(svg,0).
+bbleft(svg_rect_0,0).
+bbright(svg,600).
+bbright(svg_rect_0,200).
+bbtop(svg,0).
+bbtop(svg_rect_0,0).
 fill(svg_rect_0,"lightyellow").
 fill(svg_text_1,"black").
 fill(svg_text_2,"black").
+height(svg,510).
+height(svg_rect_0,100).
 height_str(svg,"510").
 height_str(svg_rect_0,"100").
+name(svg_rect_0,"output").
 rect(svg_rect_0,"").
 string(svg_text_1, "output").  
 string(svg_text_2, "floating"). 
 svgbox(svg,"").
 text(svg_text_1,"").
 text(svg_text_2,"").
+width(svg,600).
+width(svg_rect_0,200).
 width_str(svg,"600").
 width_str(svg_rect_0,"200").
+x(svg_text_1,100).
+x(svg_text_2,300).
 x_str(svg_text_1,"100").
 x_str(svg_text_2,"300").
+y(svg_text_1,55).
+y(svg_text_2,55).
 y_str(svg_text_1,"55").
 y_str(svg_text_2,"55").

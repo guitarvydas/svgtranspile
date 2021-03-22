@@ -263,7 +263,7 @@ var _eq = __eq._glue ();
 var str = _str._glue ();
 var _ws = __ws._glue ().join ('');
                           _ruleExit ("widthAttribute");
-                          return `width(${scopeGet ("path")},${str}).\n`; 
+                          return `width_str(${scopeGet ("path")},${str}).\n`; 
                         },
             
                heightAttribute : function (__,__eq,_str,__ws) { 
@@ -274,7 +274,7 @@ var _eq = __eq._glue ();
 var str = _str._glue ();
 var _ws = __ws._glue ().join ('');
                           _ruleExit ("heightAttribute");
-                          return `height(${scopeGet ("path")},${str}).\n`; 
+                          return `height_str(${scopeGet ("path")},${str}).\n`; 
                         },
             
                xAttribute : function (__,__eq,_str,__ws) { 
@@ -285,7 +285,7 @@ var _eq = __eq._glue ();
 var str = _str._glue ();
 var _ws = __ws._glue ().join ('');
                           _ruleExit ("xAttribute");
-                          return `x(${scopeGet ("path")},${str}).\n`; 
+                          return `x_str(${scopeGet ("path")},${str}).\n`; 
                         },
             
                yAttribute : function (__,__eq,_str,__ws) { 
@@ -296,7 +296,7 @@ var _eq = __eq._glue ();
 var str = _str._glue ();
 var _ws = __ws._glue ().join ('');
                           _ruleExit ("yAttribute");
-                          return `y(${scopeGet ("path")},${str}).\n`; 
+                          return `y_str(${scopeGet ("path")},${str}).\n`; 
                         },
             
                fillAttribute : function (__,__eq,_str,__ws) { 
@@ -318,7 +318,7 @@ var _eq = __eq._glue ();
 var str = _str._glue ();
 var _ws = __ws._glue ().join ('');
                           _ruleExit ("genericAttribute");
-                          return `%\n`; 
+                          return `\n`; 
                         },
             
                text : function (_x) { 
