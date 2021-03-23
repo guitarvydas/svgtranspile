@@ -27,14 +27,10 @@ smallestEnclosingShape(ID,TID) :-
     containsText(ID,TID).
 
 
-name(ID,TID) :-
+nameid(ID,TID) :-
     shape(ID),
     textObject(TID),
     smallestEnclosingShape(ID,TID).
-
-namestr(ID,Str) :-
-    name(ID,TID),
-    string(TID,Str).
 
 
 shape(ID) :-
@@ -73,7 +69,11 @@ bb(ID,L,T,R,B) :-
     bbright(ID,R),
     bbbottom(ID,B).
 
-writeName(ID,Str) :- writef("name(%w,\"%w\").\n",[ID,Str]).
+writeName(ID,TID) :-
+    writef("nameOf(%w,%w).\n",[TID,ID]),
+    string(TID,Str),
+    writef("stringname(%w,\"%w\").\n",[ID,Str]),
+    writef("name(%w,%w).\n",[ID,TID]).
 
 main :-
-    forall(namestr(ID,Str),writeName(ID,Str)).
+    forall(nameid(ID,TID),writeName(ID,TID)).
