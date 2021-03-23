@@ -13,10 +13,12 @@ height(svg,510).
 height(svg_rect_0,100).
 height_str(svg,"510").
 height_str(svg_rect_0,"100").
-name(svg_rect_0,"output").
+name(svg_rect_0,svg_text_1).
+nameOf(svg_text_1,svg_rect_0).
 rect(svg_rect_0,"").
 string(svg_text_1, "output").  
 string(svg_text_2, "floating"). 
+stringname(svg_rect_0,"output").
 svgbox(svg,"").
 text(svg_text_1,"").
 text(svg_text_2,"").
