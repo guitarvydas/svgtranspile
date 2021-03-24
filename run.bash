@@ -1,13 +1,17 @@
 #!/bin/bash
 
 # convert SVG diagram to factbase (fb) in prolog format (fb.pl)
-node ../glue/glue.js <svg2p.glue >_temp.js  
+## use glue (PEG) tool to generate "semantic" code for Ohm-JS (PEG)
+node ../glue/glue.js <svg2p.glue >_temp.js
+## use Ohm-JS to read SVG and output fb.pl
 cat svg2p1.js _temp.js svg2p2.js foreign.js >svg2p.js
 node svg2p <test.svg >_temp.pl
 awk '{gsub(/^[ \t]+/,"",$0); print($0);}' <_temp.pl >_temp2.pl
 sed -e '/^$/d' <_temp2.pl >_temp3.pl
 ./delblanklines.bash <_temp2.pl >_temp3.pl
-sort <_temp3.pl >out.pl
+sort <_temp3.pl >fb.pl
+
+## use PROLOG to convert strings to numbers
 ./num.bash >fb1.pl
 cat out.pl fb1.pl >fb.pl
 
