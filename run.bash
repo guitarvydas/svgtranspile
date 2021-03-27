@@ -2,7 +2,7 @@
 
 # convert SVG diagram to factbase (fb) in prolog format (fb.pl)
 ## use glue (PEG) tool to generate "semantic" code for Ohm-JS (PEG)
-node ../glue/glue.js <svg2p.glue >_temp.js
+node glue.js <svg2p.glue >_temp.js
 ## use Ohm-JS to read SVG and output fb.pl
 cat svg2p1.js _temp.js svg2p2.js foreign.js >svg2p.js
 node svg2p <test.svg >_temp.pl
