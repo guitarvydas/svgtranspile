@@ -19,7 +19,7 @@ I put this SVG code in https://www.w3schools.com/graphics/tryit.asp?filename=try
 <body>
 
 <svg width="400" height="110">
-  <rect width="300" height="100" style="fill:yellow" style=stroke-width:1;stroke:rgb(0,0,0)" >invisible</rect>
+  <rect width="300" height="100" style="fill:yellow" style="stroke-width:1;stroke:rgb(0,0,0)" >invisible</rect>
     <text x="100" y="55" fill="black">This is Text!</text>
 
   Sorry, your browser does not support inline SVG.  
